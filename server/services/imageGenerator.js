@@ -61,18 +61,28 @@ const generateImage = async (playlistData) => {
       `<div id="card-container" style="background-image: linear-gradient(to bottom, ${vibrantColor} 0%, ${darkenHexColor(vibrantColor, 0.3)} 35%, ${darkenHexColor(vibrantColor, 0.5)} 100%);">`
     );
 
-  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-  const page = await browser.newPage();
-  await page.setViewport({ width: 2160, height: 4680, deviceScaleFactor: 1 });
-  await page.setContent(templateHtml, { waitUntil: 'networkidle0' });
+  const browser = await puppeteer.launch({
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage'
+    ],
+    // Isto permite que o Puppeteer encontre o Chromium no Docker ou use o local
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
+  });
+  try {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 2160, height: 4680, deviceScaleFactor: 1 });
+    await page.setContent(templateHtml, { waitUntil: 'networkidle0' });
 
-  const cardElement = await page.$('#card-container');
-  const cardBuffer = await cardElement.screenshot({ type: 'png' });
-  const pageBuffer = await page.screenshot({ type: 'png', fullPage: true });
+    const cardElement = await page.$('#card-container');
+    const cardBuffer = await cardElement.screenshot({ type: 'png' });
+    const pageBuffer = await page.screenshot({ type: 'png', fullPage: true });
 
-  await browser.close();
-
-  return { cardBuffer, pageBuffer, vibrantColor, playlistName: playlistData.name };
+    return { cardBuffer, pageBuffer, vibrantColor, playlistName: playlistData.name };
+  } finally {
+    await browser.close();
+  }
 };
 
 module.exports = { generateImage };
