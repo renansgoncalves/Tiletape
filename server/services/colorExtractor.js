@@ -86,11 +86,8 @@ const getVibrantColor = async (imageUrl, fallback = '#121212') => {
       
       let [h, s, l] = rgbToHsl(...rgb);
 
-      if (h >= 205 && h <= 250) {       // Verifica se há um tom de azul
+      if (h >= 205 && h <= 250 && s >= 0.4) {       // Verifica se há um tom de azul
         console.log(`Tom de azul encontrado:\nhue: ${h.toFixed(0)},\nsat: ${(s*100).toFixed(0)}%,\nlum: ${(l*100).toFixed(0)}%.\n`);
-        
-        // Trata a saturação do tom de azul encontrado
-        if (s < 0.3) { s += 0.25; console.log(`Saturação  do azul ajustada para: ${(s*100).toFixed(0)}%.`); }
 
         // Trata a luminosidade do tom de azul encontrado
         if (l > 0.5) { difL50 = l-0.5; l -= difL50/2; }

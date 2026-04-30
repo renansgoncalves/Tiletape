@@ -4,7 +4,38 @@
         "**/.svn": true,
         "**/.hg": true,
         "**/.DS_Store": true,
-        "**/Thumbs.db": true
+        "**/Thumbs.db": true,
+        "client/eslint.config.js": true,
+        "client/.gitignore": true,
+        "client/src/index.jsx": true,
+        "client/src/App.jsx": true,
+        "client/node_modules": true,
+        ".vscode": true,
+        "server/node_modules": true,
+        "server/assets": true,
+        "server/.dockerignore": true,
+        "server/.env": true,
+        "server/.gitignore": true,
+        "server/Dockerfile": true,
+        "server/package-lock.json": true,
+        "server/package.json": true,
+        "LICENSE": true
     },
-    "hide-files.files": []
+    "hide-files.files": [
+        "client/eslint.config.js",
+        "client/.gitignore",
+        "client/src/index.jsx",
+        "client/src/App.jsx",
+        "client/node_modules",
+        ".vscode",
+        "server/node_modules",
+        "server/assets",
+        "server/.dockerignore",
+        "server/.env",
+        "server/.gitignore",
+        "server/Dockerfile",
+        "server/package-lock.json",
+        "server/package.json",
+        "LICENSE"
+    ]
 }
