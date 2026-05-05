@@ -25,4 +25,19 @@ const getSpotifyToken = async () => {
   return response.data.access_token;
 };
 
-module.exports = { getSpotifyToken };
+const getUserProfileImage = async (userId, token) => {
+  try {
+    const response = await axios.get(`https://api.spotify.com/v1/users/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    return response.data.images[0]?.url || null;
+  } catch (error) {
+    console.error('Erro ao buscar foto de perfil do usuário:', error.message);
+    return null;
+  }
+};
+
+module.exports = { getSpotifyToken, getUserProfileImage };

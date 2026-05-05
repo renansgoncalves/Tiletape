@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPlaylist } from '../api';
 import CardViewer from '../components/PlaylistCard/CardViewer';
+import LoadingViewer from '../components/PlaylistCard/LoadingViewer';
 
 export default function PlaylistPage({ playlistId }) {
   const [playlist, setPlaylist] = useState(null);
@@ -13,7 +14,7 @@ export default function PlaylistPage({ playlistId }) {
   }, [playlistId]);
 
   if (error) return <div>Erro: {error}</div>;
-  if (!playlist) return <div>Carregando...</div>;
+  if (!playlist) return <LoadingViewer/>;
 
   return (
     <CardViewer

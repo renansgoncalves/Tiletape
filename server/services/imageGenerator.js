@@ -41,8 +41,13 @@ const generateImage = async (playlistData) => {
       )
       .join('');
 
-  const profileBuffer = await fs.readFile('./assets/profile.png');
-  const profileBase64 = `data:image/png;base64,${profileBuffer.toString('base64')}`;
+  let finalProfileSrc = ownerImageUrl;
+
+  // Se o usuário não tiver foto no Spotify, usamos a genérica local
+  if (!finalProfileSrc) {
+    const profileBuffer = await fs.readFile('./assets/profile.png');
+    finalProfileSrc = `data:image/png;base64,${profileBuffer.toString('base64')}`;
+  }
 
   templateHtml = templateHtml
     .replace('{{playlistName}}', playlistData.name)
@@ -50,7 +55,7 @@ const generateImage = async (playlistData) => {
     .replace('{{playlistCoverUrl}}', playlistCoverUrl)
     .replace('{{col1}}', renderTracks(col1Tracks))
     .replace('{{col2}}', renderTracks(col2Tracks))
-    .replace('<img id="profileImg" src=""/>', `<img id="profileImg" src="${profileBase64}"/>`)
+    .replace('{{ownerProfileUrl}}', finalProfileSrc)
     .replace(
       '<body style="background-color: #121212;">',
       `<body style="background-color: ${darkenHexColor(vibrantColor, 0.55)};">`

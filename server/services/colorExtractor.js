@@ -86,21 +86,21 @@ const getVibrantColor = async (imageUrl, fallback = '#121212') => {
       
       let [h, s, l] = rgbToHsl(...rgb);
 
-      if (h >= 205 && h <= 250 && s >= 0.4) {       // Verifica se há um tom de azul
-        console.log(`Tom de azul encontrado:\nhue: ${h.toFixed(0)},\nsat: ${(s*100).toFixed(0)}%,\nlum: ${(l*100).toFixed(0)}%.\n`);
-
-        // Trata a luminosidade do tom de azul encontrado
-        if (l > 0.5) { difL50 = l-0.5; l -= difL50/2; }
-        else         { difL50 = 0.5-l; l += difL50/2; }
-
-        console.log(`Luminosidade do azul ajustada para: ${(l*100).toFixed(0)}%.\n`);
-
-        // Retorna o tom de azul e encerra a função
-        return rgbToHex(...hslToRgb(h, s, l));
-      }
+//      if (h >= 205 && h <= 250 && s >= 0.4) {       // Verifica se há um tom de azul
+//        console.log(`Tom de azul encontrado:\nhue: ${h.toFixed(0)},\nsat: ${(s*100).toFixed(0)}%,\nlum: ${(l*100).toFixed(0)}%.\n`);
+//
+//        // Trata a luminosidade do tom de azul encontrado
+//        if (l > 0.5) { difL50 = l-0.5; l -= difL50/2; }
+//        else         { difL50 = 0.5-l; l += difL50/2; }
+//
+//        console.log(`Luminosidade do azul ajustada para: ${(l*100).toFixed(0)}%.\n`);
+//
+//        // Retorna o tom de azul e encerra a função
+//        return rgbToHex(...hslToRgb(h, s, l));
+//      }
     }
 
-    // Retorna cor capturada pelo "node-vibrant" caso um tom de azul não tenha sido encontrado
+    // Retorna cor capturada pelo "node-vibrant"
     console.log('Retornada cor extraída pelo node-vibrant.\n');
     const palette = await Vibrant.from(imageUrl).getPalette();
     return palette.Vibrant?.hex || fallback;
