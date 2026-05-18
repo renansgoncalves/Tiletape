@@ -1,43 +1,39 @@
-require('dotenv').config();
 const axios = require('axios');
 
-const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
-const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+let cachedToken = null;
+let tokenExpirationTime = 0;
 
-if (!CLIENT_ID || !CLIENT_SECRET) {
-  throw new Error('Spotify CLIENT_ID ou CLIENT_SECRET não definidos no .env');
+async function getSpotifyToken() {
+  const currentTime = Date.now();
+  
+  if (cachedToken && currentTime < tokenExpirationTime) {
+    return cachedToken;
+  }
+
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+
+  try {
+    const response = await axios.post(
+      'https://accounts.spotify.com/api/token',
+      'grant_type=client_credentials',
+      {
+        headers: {
+          'Authorization': `Basic ${credentials}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    );
+
+    cachedToken = response.data.access_token;
+    tokenExpirationTime = currentTime + (response.data.expires_in * 1000) - 60000;
+
+    return cachedToken;
+  } catch (error) {
+    console.error('Error fetching Spotify token:', error);
+    throw new Error('Failed to authenticate with Spotify');
+  }
 }
 
-// Retorna token de acesso do Spotify
-const getSpotifyToken = async () => {
-  const authString = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
-
-  const response = await axios({
-    method: 'post',
-    url: 'https://accounts.spotify.com/api/token',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': `Basic ${authString}`
-    },
-    data: 'grant_type=client_credentials'
-  });
-
-  return response.data.access_token;
-};
-
-const getUserProfileImage = async (userId, token) => {
-  try {
-    const response = await axios.get(`https://api.spotify.com/v1/users/${userId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    
-    return response.data.images[0]?.url || null;
-  } catch (error) {
-    console.error('Erro ao buscar foto de perfil do usuário:', error.message);
-    return null;
-  }
-};
-
-module.exports = { getSpotifyToken, getUserProfileImage };
+module.exports = { getSpotifyToken };

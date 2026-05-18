@@ -20,8 +20,11 @@ function HomePage() {
 
     let playlistId = link.trim();
 
-    if (playlistId.includes('spotify.com/playlist/')) {
-      playlistId = playlistId.split('playlist/')[1].split('?')[0];
+    // Regex captura qualquer sequência de caracteres alfanuméricos estritamente após "playlist/"
+    const matchId = playlistId.match(/playlist\/([a-zA-Z0-9]+)/);
+    
+    if (matchId && matchId[1]) {
+      playlistId = matchId[1];
     }
 
     navigate(`/playlist/${playlistId}`);
@@ -41,9 +44,9 @@ function HomePage() {
 
       {/* CONTEÚDO CENTRAL */}
       <div className="content">
-        <h1>surasic</h1>
+        <h1>tiletape.</h1>
 
-        <p>Cole o link da playlist para gerar um card interativo</p>
+        <p>Transforme sua playlist em um pôster icônico! É só colar o link.</p>
 
         <form onSubmit={handleGenerate} className="form">
           <input

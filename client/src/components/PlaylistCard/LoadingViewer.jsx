@@ -26,7 +26,7 @@ function LoadingViewer() {
   return (
     <div className="loading-container">
       <div className="spinner"></div>
-      <h2 className="loading-title">surasic</h2>
+      <h2 className="loading-title">tiletape.</h2>
       {/* A key força a animação do CSS a rodar novamente toda vez que o texto muda */}
       <p key={messageIndex} className="loading-text">
         {messages[messageIndex]}

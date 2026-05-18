@@ -13,14 +13,17 @@ export default function PlaylistPage({ playlistId }) {
       .catch(err => setError(err.message));
   }, [playlistId]);
 
-  if (error) return <div>Erro: {error}</div>;
-  if (!playlist) return <LoadingViewer/>;
+  if (error) return <div>Error: {error}</div>;
+  
+  if (!playlist) return <LoadingViewer />;
 
   return (
     <CardViewer
       cardBase64={playlist.cardBase64}
       pageBase64={playlist.pageBase64}
+      cardBox={playlist.cardBox}
       vibrantColor={playlist.vibrantColor}
+      colorPalette={playlist.colorPalette}
       playlistName={playlist.playlistName}
     />
   );

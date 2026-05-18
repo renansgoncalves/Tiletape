@@ -5,33 +5,55 @@ body {
 
 .viewer-container {
   margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #121212; /* fallback */
-  gap: 20px;
+  
+  /* Usa Dynamic Viewport Height para ignorar o bug da barra do celular */
+  min-height: 100dvh; 
+  background-color: #121212; 
+  
+  /* Trava a distância entre o card e as bolinhas de cor com pixels absolutos */
+  gap: 32px; 
+  
+  padding: 2rem; 
+  box-sizing: border-box;
 }
 
 .card-wrapper {
-  perspective: 2000px;
+  perspective: 1000px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.card {
+.card-final {
   position: relative;
+  /* A CURA DO IPAD: inline-block cria um "vácuo" em volta da imagem. 
+     A div nunca será nem 1 pixel mais larga que a imagem! */
+  display: inline-block; 
+  border-radius: 16px;
   transform-style: preserve-3d;
-  display: inline-block;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 64px 128px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); 
 }
 
-.card::before {
+.card-final img {
+  /* display: block remove um espaçamento invisível que navegadores criam debaixo de imagens */
+  display: block; 
+  max-height: 75vh; 
+  
+  /* Garante que em celulares finos o card não bata nas bordas da tela */
+  max-width: min(100vw - 4rem, 380px); 
+  
+  width: auto; 
+  height: auto;
+  object-fit: contain; 
+  border-radius: inherit; 
+  pointer-events: none; 
+} 
+
+.card-final::before {
   content: '';
   position: absolute;
   top: 0; left: 0;
@@ -43,27 +65,42 @@ body {
   border-radius: 22px;
 }
 
-.card img {
-  display: block;
-  max-width: 22vw;
-  border-radius: 16px;
-}
-
-.download-btn {
+/* Styling for the Floating Action Button (FAB) */
+.download-btn-floating {
+  position: absolute;
+  top: -20px;   /* Puxa o botão para fora e para cima da quina */
+  left: -20px;  /* Puxa o botão para fora e para a esquerda da quina */
+  width: 54px;
+  height: 54px;
+  background-color: #1DB954; 
+  color: #ffffff;
+  border: none;
+  border-radius: 50%; /* Faz um círculo perfeito */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: none;
-  color: #fff;
-  font-weight: bold;
   cursor: pointer;
-  background-color: var(--vibrant-color, #d7b08a);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  z-index: 20; /* Mantém ele acima da imagem e do efeito de brilho */
+  
+  /* Sombra mais dramática para destacar que ele está "flutuando" */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.download-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+.download-btn-floating svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Hover State - Quando passa o mouse no PC */
+.download-btn-floating:hover {
+  background-color: #1ed760; 
+  transform: scale(1.15); /* Cresce um pouco ao passar o mouse */
+  box-shadow: 0 12px 32px rgba(29, 185, 84, 0.6); 
+}
+
+/* Active State - Quando aperta com o dedo/mouse */
+.download-btn-floating:active {
+  transform: scale(0.95); 
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
 }
