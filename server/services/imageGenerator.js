@@ -8,13 +8,15 @@ let browserInstance = null;
 
 async function getBrowserInstance() {
   if (!browserInstance) {
-    // Inicializa o navegador apenas uma vez com todas as flags necessárias
     browserInstance = await puppeteer.launch({
       headless: true,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--no-zygote',
+        '--single-process',
         '--ignore-certificate-errors'
       ],
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
@@ -95,7 +97,7 @@ const generateImage = async (playlistData) => {
 
     // Ajusta a página e injeta o conteúdo
     await page.setViewport({ width: 2160, height: 4680, deviceScaleFactor: 1 });
-    await page.setContent(templateHtml, { waitUntil: 'networkidle0' });
+    await page.setContent(templateHtml, { waitUntil: 'load', timeout: 90000 });
 
     const cardElement = await page.$('#card-container');
     const cardBox = await cardElement.boundingBox();
