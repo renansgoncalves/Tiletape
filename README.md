@@ -1,11 +1,12 @@
 # tiletape.
-Transforme sua playlist em um pôster icônico!
+
+Transforme sua playlist em um pôster icônico! Acesse a aplicação no ar aqui: https://tiletape.vercel.app/ 🔗
 
 ![Preview](client/src/assets/preview.png)
 
 O **tiletape.** é uma aplicação full-stack construída para gerar cards visuais de alta qualidade a partir de playlists do Spotify. O sistema realiza a leitura da playlist, extrai ativamente uma paleta de cores baseada na capa e gera um pôster customizado pronto para download. A arquitetura é dividida de forma limpa entre uma aplicação frontend em React e uma API backend em Node.js.
 
-## 🚀 Funcionalidades
+## 💡 Funcionalidades
 
 * **Transformação de links:** O usuário insere a URL da playlist do Spotify e a aplicação faz o resto.
 * **Extração de cores:** A capa da playlist é baixada pelo sistema, que utiliza as bibliotecas `node-vibrant` e `colorthief` para gerar uma paleta de cores temática.
