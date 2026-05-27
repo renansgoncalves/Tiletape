@@ -5,7 +5,7 @@ Transform your Spotify playlist into an iconic poster! Access the live applicati
 
 **tiletape.** is a fullstack application built to generate high-quality visual cards from Spotify playlists. The system reads the playlist, actively extracts a color palette based on its artwork, and generates a customized poster ready for download. The architecture is cleanly split into a React frontend application and a Node.js backend API.
 
-## 🚀 Features
+## ⚙ Features
 
 * **Link transformation:** The user inputs the Spotify playlist URL and the application handles the rest.
 * **Color extraction:** The playlist cover is downloaded by the system, which leverages the `node-vibrant` and `colorthief` libraries to extract a themed color palette.
