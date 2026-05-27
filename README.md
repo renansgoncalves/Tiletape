@@ -47,7 +47,7 @@ Below is the breakdown of the repository's main directories:
         └── index.js           # Express server entry point
 ```
 
-## 🚀 Para execução local
+## 🚀 Local execution
 
 To run this application locally, you will need Node.js (v18+) and developer credentials from the Spotify Dashboard.
 
