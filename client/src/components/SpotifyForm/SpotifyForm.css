@@ -1,0 +1,164 @@
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 460px;
+  padding: 2px 2px 2px 28px; 
+  margin-top: 40px;
+  border-radius: 999px;
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.12); 
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.container.loading .form {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.container.loaded .form {
+  opacity: 1;
+}
+
+.form:hover,
+.form:focus-within {
+  background-color: rgba(255, 255, 255, 0.04); 
+  box-shadow: 0 0 50px rgba(69, 144, 237, 0.015); 
+}
+
+.form::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  padding: 2px;
+  background: linear-gradient(135deg, #4590ed90, #6850cf90, #13714590);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.link-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 16px;
+  color: rgba(255, 255, 255, 0.4); 
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.form:focus-within .link-icon { color: rgba(255, 255, 255, 0.8); }
+
+.form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  padding: 22px 0px;
+}
+
+.form input::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+.cd-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  position: relative; 
+  margin-left: 20px;
+}
+
+.cd-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 64px; 
+  height: 64px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.01);
+  will-change: transform, opacity;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+}
+
+.cd-button:hover::after {
+  opacity: 0.35;
+  transform: translate(-50%, -50%) scale(1.12) rotate(25deg);
+}
+
+.cd {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  transform: scale(1.01);
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), filter 0.27s ease;
+}
+
+.cd-button:hover .cd {
+  transform: scale(1.12) rotate(25deg);
+  filter: drop-shadow(0 0 38px rgba(255, 155, 255, 0.25));
+}
+
+@media (max-width: 768px) {
+  .form {
+    width: 290px !important; 
+    margin-top: 24px !important;
+    padding: 2px 2px 2px 14px !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+
+  .form input {
+    font-size: 13px !important; 
+    padding: 16px 0px !important;
+  }
+
+  .form input::placeholder,
+  .form input::-webkit-input-placeholder { 
+    color: transparent !important; 
+  }
+  
+  .form::after {
+    content: "Cole o link da sua playlist"; 
+    position: absolute;
+    left: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+    font-family: 'Nunito', sans-serif;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .form:has(input:not(:placeholder-shown))::after {
+    opacity: 0 !important;
+  }
+
+  .link-icon {
+    width: 16px !important;
+    height: 16px !important;
+    margin-right: 8px !important;
+  }
+
+  .cd { width: 48px !important; height: 48px !important; }
+  .cd-button::after { width: 38px !important; height: 38px !important; }
+}

@@ -131,11 +131,11 @@ export default function CardViewer({ cardBase64, pageBase64, cardBox, vibrantCol
       canvas.width = img.width;
       canvas.height = img.height;
       
-      // CAMADA 1 (O Fundo do Story): Pinta a tela inteira com a cor sólida escura
+      // Camada 1: Pinta a tela inteira com a cor sólida escura
       ctx.fillStyle = darkenHexColor(activeColor, 0.55);
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // CAMADA 2 (O Fundo do Card): Pinta o degradê APENAS onde o card está!
+      // Camada 2: Pinta o degradê apenas onde o card está
       if (cardBox) {
         const gradient = ctx.createLinearGradient(0, cardBox.y, 0, cardBox.y + cardBox.height);
         gradient.addColorStop(0, activeColor);
@@ -149,7 +149,7 @@ export default function CardViewer({ cardBase64, pageBase64, cardBox, vibrantCol
         ctx.fill();
       }
       
-      // CAMADA 3 (O Carimbo): Joga a imagem transparente (textos, capas e sombra) por cima de tudo
+      // Camada 3: Joga a imagem transparente (textos, capas e sombra) por cima de tudo
       ctx.drawImage(img, 0, 0);
       
       const link = document.createElement('a');
@@ -158,7 +158,6 @@ export default function CardViewer({ cardBase64, pageBase64, cardBox, vibrantCol
       link.click();
     };
     
-    // Voltamos a puxar a imagem gigante da página inteira!
     img.src = `data:image/png;base64,${pageBase64}`;
   };
 
@@ -194,10 +193,9 @@ export default function CardViewer({ cardBase64, pageBase64, cardBox, vibrantCol
              '--shine-color': darkenHexColor(activeColor, -0.3),
              backgroundImage: `linear-gradient(to bottom, ${activeColor} 0%, ${darkenHexColor(activeColor, 0.2)} 45%, ${darkenHexColor(activeColor, 0.4)} 100%)`,
              borderRadius: '16px',
-             // Removido o overflow: hidden para o botão poder vazar para os lados!
           }}
         >
-          {/* Botão flutuante perfeitamente ancorado no topo esquerdo do card */}
+          {/* Botão flutuante ancorado no topo esquerdo do card */}
           <button
             className="download-btn-floating"
             onClick={downloadCard}

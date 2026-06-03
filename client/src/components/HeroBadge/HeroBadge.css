@@ -1,0 +1,104 @@
+.badge {
+  display: flex;
+  align-items: center;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #9eff5912, #20ffb712, #6c4aff12);
+  position: relative; 
+  border: none; 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  box-shadow: 0 0 30px rgba(123, 255, 198, 0.1);
+  overflow: hidden;
+
+  transform: scale(1) rotate(0.001deg) translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transform-style: preserve-3d; 
+  
+  will-change: transform, box-shadow, background-color; 
+  transition: 
+    transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.4s ease,
+    background-color 0.4s ease;
+}
+
+.container.loading .badge span,
+.container.loading .badge::before {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.container.loaded .badge span,
+.container.loaded .badge::before {
+  opacity: 1;
+}
+
+.badge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  padding: 2px;
+  background: linear-gradient(135deg, #9eff5960, #9eff59e5, #9eff5960, #9eff5940, #20ffb740, #20ffb740, #6c4aff60, #6c4aff60);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+
+  transform: scale(0.001px) translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.badge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    380px circle at var(--badge-x, 0px) var(--badge-y, 0px),
+    rgba(32, 255, 183, 0.24) 0%,   
+    rgba(108, 74, 255, 0.12) 50%,
+    rgba(108, 74, 255, 0.02) 80%,  
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.badge:hover {
+  transform: scale(1.02) rotate(0.001deg) translateZ(0); 
+  background-color: rgba(255, 255, 255, 0.06); 
+  box-shadow: 0 10px 40px rgba(123, 255, 198, 0.25);
+}
+
+.badge:hover::after { opacity: 1; }
+
+.badge span {
+  position: relative;
+  z-index: 2; 
+  pointer-events: none; 
+  background: linear-gradient(135deg, #9eff59, #20ffb7, #5a35ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .badge {
+    padding: 8px 16px !important;
+    font-size: 11px !important;
+    gap: 6px !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+}

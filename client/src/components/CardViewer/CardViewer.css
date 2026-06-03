@@ -9,14 +9,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
-  /* Usa Dynamic Viewport Height para ignorar o bug da barra do celular */
   min-height: 100dvh; 
   background-color: #121212; 
-  
-  /* Trava a distância entre o card e as bolinhas de cor com pixels absolutos */
   gap: 32px; 
-  
   padding: 2rem; 
   box-sizing: border-box;
 }
@@ -30,8 +25,6 @@ body {
 
 .card-final {
   position: relative;
-  /* A CURA DO IPAD: inline-block cria um "vácuo" em volta da imagem. 
-     A div nunca será nem 1 pixel mais larga que a imagem! */
   display: inline-block; 
   border-radius: 16px;
   transform-style: preserve-3d;
@@ -39,13 +32,9 @@ body {
 }
 
 .card-final img {
-  /* display: block remove um espaçamento invisível que navegadores criam debaixo de imagens */
   display: block; 
   max-height: 75vh; 
-  
-  /* Garante que em celulares finos o card não bata nas bordas da tela */
   max-width: min(100vw - 4rem, 380px); 
-  
   width: auto; 
   height: auto;
   object-fit: contain; 
@@ -65,24 +54,22 @@ body {
   border-radius: 22px;
 }
 
-/* Styling for the Floating Action Button (FAB) */
 .download-btn-floating {
   position: absolute;
-  top: -20px;   /* Puxa o botão para fora e para cima da quina */
-  left: -20px;  /* Puxa o botão para fora e para a esquerda da quina */
+  top: -20px;
+  left: -20px;
   width: 54px;
   height: 54px;
   background-color: #1DB954; 
   color: #ffffff;
   border: none;
-  border-radius: 50%; /* Faz um círculo perfeito */
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  z-index: 20; /* Mantém ele acima da imagem e do efeito de brilho */
+  z-index: 20;
   
-  /* Sombra mais dramática para destacar que ele está "flutuando" */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -92,15 +79,52 @@ body {
   height: 26px;
 }
 
-/* Hover State - Quando passa o mouse no PC */
 .download-btn-floating:hover {
   background-color: #1ed760; 
-  transform: scale(1.15); /* Cresce um pouco ao passar o mouse */
+  transform: scale(1.15);
   box-shadow: 0 12px 32px rgba(29, 185, 84, 0.6); 
 }
 
-/* Active State - Quando aperta com o dedo/mouse */
 .download-btn-floating:active {
   transform: scale(0.95); 
   box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+}
+
+.palette-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  z-index: 10;
+}
+
+.palette-swatches {
+  display: flex;
+  gap: 14px;
+  background-color: rgba(0, 0, 0, 0.3); 
+  padding: 10px 18px;
+  border-radius: 30px;
+  backdrop-filter: blur(8px); 
+}
+
+.color-swatch {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  border: 2px solid transparent; 
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.color-swatch:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch.active {
+  border-color: #ffffff; 
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5); 
 }

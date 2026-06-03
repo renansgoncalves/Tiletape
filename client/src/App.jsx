@@ -1,7 +1,6 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-import PlaylistPage from './pages/PlaylistPage';
-import HomePage from './pages/HomePage';
+import PlaylistPage from './pages/Playlist/PlaylistPage';
+import HomePage from './pages/Home/HomePage';
 
 function App() {
   return (
@@ -17,7 +16,6 @@ function App() {
   );
 }
 
-// Wrapper para extrair o playlistId da URL
 function PlaylistPageWrapper() {
   const { playlistId } = useParams();
   return <PlaylistPage playlistId={playlistId} />;

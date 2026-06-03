@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPlaylist } from '../api';
-import CardViewer from '../components/PlaylistCard/CardViewer';
-import LoadingViewer from '../components/PlaylistCard/LoadingViewer';
+import { fetchPlaylist } from '../../api/api';
+import CardViewer from '../../components/CardViewer/CardViewer';
+import LoadingViewer from '../../components/LoadingViewer/LoadingViewer';
 
 export default function PlaylistPage({ playlistId }) {
   const [playlist, setPlaylist] = useState(null);

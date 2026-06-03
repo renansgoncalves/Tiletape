@@ -1,0 +1,177 @@
+.cards-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px; 
+  pointer-events: none; 
+  z-index: 1;
+}
+
+.card {
+  position: absolute;
+  width: 390px;
+  border-radius: 22px;
+  z-index: 1; 
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.7);
+  scale: 1.6;
+  backface-visibility: hidden;
+  will-change: transform, filter, scale, translate;
+  
+  transition: 
+    transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1),
+    filter 1s cubic-bezier(0.25, 0.8, 0.25, 1),
+    scale 1.6s cubic-bezier(0.16, 1, 0.3, 1),
+    translate 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.container.loading .card {
+  visibility: hidden;
+}
+
+.container.loaded .card {
+  visibility: visible;
+  scale: 1;
+  translate: 0 0;
+}
+
+.container.loading .aqua,
+.container.loading .blue,
+.container.loading .red,
+.container.loading .purple {
+  translate: -180px 15px; 
+}
+
+.container.loading .darkRed,
+.container.loading .pink,
+.container.loading .green,
+.container.loading .darkBlue {
+  translate: 180px 15px;
+}
+
+.red {
+  bottom: -160px;
+  left: -3%;
+  transform: rotateY(65deg) rotateX(12deg) translateZ(100px) 
+             translateX(calc(var(--mouse-x) * var(--parallax-scale) * -65px)) 
+             translateY(calc(var(--mouse-y) * var(--parallax-scale) * -65px));
+}
+
+.blue {
+  top: 0px;
+  left: 16%; 
+  transform: rotate(10deg) rotateY(75deg) rotateX(-4deg) translateZ(-320px) scale(0.9)
+             translateX(calc(var(--mouse-x) * var(--parallax-scale) * -35px)) 
+             translateY(calc(var(--mouse-y) * var(--parallax-scale) * -35px));
+  filter: brightness(95%) blur(0.5px);
+}
+
+.purple {
+  bottom: 46%;
+  left: 30%; 
+  transform: rotate(8deg) rotateY(65deg) rotateX(6deg) translateZ(-320px) scale(0.6)
+             translateX(calc(var(--mouse-x) * var(--parallax-scale) * -20px)) 
+             translateY(calc(var(--mouse-y) * var(--parallax-scale) * -20px));
+  mask: linear-gradient(to right, black, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.25));
+  filter: brightness(60%) blur(2px);
+}
+
+.aqua {
+  bottom: -180px;
+  left: 16.5%;
+  transform: rotate(-26deg) rotateY(75deg) rotateX(6deg) translateZ(100px) scale(0.6)
+             translateX(calc(var(--mouse-x) * var(--parallax-scale) * -50px)) 
+             translateY(calc(var(--mouse-y) * var(--parallax-scale) * -50px));
+  mask: linear-gradient(to right, black, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.25));
+  filter: brightness(65%) blur(1.5px);
+}
+
+.green {
+  top: -60px;
+  right: 13%;
+  transform: rotate(-8deg) rotateY(-65deg) rotateX(0deg) translateZ(-320px) scale(0.8)
+             translateX(calc(var(--mouse-x) * var(--parallax-scale) * -35px)) 
+             translateY(calc(var(--mouse-y) * var(--parallax-scale) * -35px));
+  mask: linear-gradient(to left, black, black, black, rgba(0, 0, 0, 0.9));
+  filter: brightness(85%) blur(0.85px);
+}
+
+.pink {
+  bottom: -100px;
+  right: 10%;
+  transform: rotate(8deg) rotateY(-55deg) rotateX(8deg) translateZ(-160px) scale(0.95)
+             translateX(calc(var(--mouse-x) * var(--parallax-scale) * -55px)) 
+             translateY(calc(var(--mouse-y) * var(--parallax-scale) * -55px));
+}
+
+.darkBlue {
+  bottom: -120px;
+  right: -7%;
+  transform: rotate(12deg) rotateY(-45deg) rotateX(16deg) translateZ(-160px) scale(0.9)
+             translateX(calc(var(--mouse-x) * var(--parallax-scale) * -60px)) 
+             translateY(calc(var(--mouse-y) * var(--parallax-scale) * -60px));
+}
+
+.darkRed {
+  bottom: 2%;
+  right: 29%; 
+  transform: rotate(6deg) rotateY(-55deg) rotateX(22deg) translateZ(-320px) scale(0.5)
+             translateX(calc(var(--mouse-x) * var(--parallax-scale) * -25px)) 
+             translateY(calc(var(--mouse-y) * var(--parallax-scale) * -25px));
+  mask: linear-gradient(to left, black, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.25));
+  filter: brightness(60%) blur(3px);
+}
+
+@media (max-width: 1024px) {
+  .card { width: 260px; }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 155px !important; 
+    border-radius: 14px !important;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .aqua {
+    top: 6% !important; left: -45px !important; bottom: auto !important;
+    transform: rotate(-18deg) rotateY(35deg) scale(0.8) !important;
+  }
+
+  .purple {
+    top: 32% !important; left: -55px !important; bottom: auto !important;
+    transform: rotate(12deg) rotateY(40deg) scale(0.75) !important;
+    filter: brightness(75%) blur(0.5px) !important;
+  }
+
+  .blue {
+    bottom: 22% !important; top: auto !important; left: -35px !important;
+    transform: rotate(-8deg) rotateY(30deg) scale(0.85) !important;
+  }
+
+  .red {
+    bottom: 2% !important; left: -40px !important;
+    transform: rotate(16deg) rotateY(35deg) scale(0.8) !important;
+  }
+
+  .darkRed {
+    top: 5% !important; right: -45px !important; bottom: auto !important;
+    transform: rotate(20deg) rotateY(-35deg) scale(0.8) !important;
+  }
+
+  .green {
+    top: 34% !important; right: -55px !important;
+    transform: rotate(-14deg) rotateY(-40deg) scale(0.75) !important;
+    filter: brightness(80%) blur(0.5px) !important;
+  }
+
+  .pink {
+    bottom: 24% !important; right: -35px !important;
+    transform: rotate(10deg) rotateY(-30deg) scale(0.85) !important;
+  }
+
+  .darkBlue {
+    bottom: 3% !important; right: -40px !important;
+    transform: rotate(-16deg) rotateY(-35deg) scale(0.8) !important;
+  }
+}
