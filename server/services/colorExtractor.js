@@ -1,6 +1,7 @@
 const { Vibrant } = require('node-vibrant/node');
 const ColorThief = require('colorthief');
 const axios = require('axios');
+const sharp = require('sharp'); // NOVO: Adicionado para decodificar WebP nativamente
 
 const rgbToHex = (r, g, b) =>
   '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('');
@@ -35,10 +36,10 @@ const rgbToHsl = (r, g, b) => {
 // Função para converter HSL de volta para RGB
 const hslToRgb = (h, s, l) => {
   let r, g, b;
-  h /= 360; // h deve estar na escala 0-1
+  h /= 360; 
 
   if (s === 0) {
-    r = g = b = l; // Acromático
+    r = g = b = l; 
   } else {
     const hue2rgb = (p, q, t) => {
       if (t < 0) t += 1;
@@ -59,10 +60,7 @@ const hslToRgb = (h, s, l) => {
 
 // Central de processamento e LOG de todas as cores
 const enhanceColorForUI = (hexString, colorLabel) => {
-  if (!hexString) {
-    console.log(`\n[${colorLabel}] No color extracted from image.`);
-    return null;
-  }
+  if (!hexString) return null;
 
   const [r, g, b] = hexToRgb(hexString);
   let [h, s, l] = rgbToHsl(r, g, b);
@@ -70,26 +68,13 @@ const enhanceColorForUI = (hexString, colorLabel) => {
   console.log(`\n--- Processing [${colorLabel}] ---`);
   console.log(`Original -> H: ${h.toFixed(0)}, S: ${(s * 100).toFixed(0)}%, L: ${(l * 100).toFixed(0)}%`);
 
-  // Ajustes de Matiz (Hue) para corrigir tons marrons
-  //if (h >= 10 && h <= 30) { 
-  //  console.log(`Hue adjusted from ${h.toFixed(0)} to 10 (Neutralizing brown to red).`);
-  //  h = 10;
-  //} else if (h > 30 && h <= 50) { 
-  //  console.log(`Hue adjusted from ${h.toFixed(0)} to 50 (Neutralizing brown to green).`);
-  //  h = 50;
-  //}
-
-  // A REGRA DE OURO PARA O DEGRADÊ INTEIRO: Preserva a saturação, mas segura a luz em 35%
-  // Transforma cores "Flashbang" em "Tons de Joia" (Cores profundas e ricas)
   if (s >= 0.8 && l > 0.35) {
     console.log(`High saturation and brightness detected! Saturation kept at ${(s * 100).toFixed(0)}%.`);
     console.log(`Lightness adjusted from ${(l * 100).toFixed(0)}% to 35% for full-card white text readability.`);
     l = 0.35;
   } else {
-    // Pipeline Padrão para cores normais ou opacas
     const satHalfDif = (0.7 - s) / 2;
 
-    // Ajustes de Saturação (Saturation)
     if (s < 0.5 && l < 0.75) { 
       console.log(`Saturation boosted from ${(s * 100).toFixed(0)}% to ${((s + satHalfDif) * 100).toFixed(0)}%.`);
       s += satHalfDif;
@@ -98,7 +83,6 @@ const enhanceColorForUI = (hexString, colorLabel) => {
       s = 0.7;
     }
 
-    // Ajustes de Luminosidade (Lightness)
     if (s <= 0.5) { 
       console.log(`Lightness adjusted from ${(l * 100).toFixed(0)}% to 40% (Pastel tone handling).`);
       l = 0.4;
@@ -113,29 +97,6 @@ const enhanceColorForUI = (hexString, colorLabel) => {
   return rgbToHex(...hslToRgb(h, s, l));
 };
 
-const getColorfulColors = async (imageUrl) => {
-  // Baixa imagem como buffer
-  const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-  const buffer = Buffer.from(response.data, 'binary');
-
-  // Captura até 1000 cores para ter variedade
-  const palette = await ColorThief.getPalette(buffer, 1000);
-
-  const colorsForLog = [];                // Contém as cores distintas
-  for (const rgb of palette) {            // Percorre as 1000 cores capturadas
-    const [r, g, b] = rgb;
-    const [h, s, l] = rgbToHsl(...rgb);
-    
-    // A saturação das cores deve ser maior do que 40%
-    if (!colorsForLog.some(c => Math.abs(rgbToHsl(...c)[0] - h) < 10) && s >= 0.4) { 
-      colorsForLog.push(rgb);
-    }
-    if (colorsForLog.length >= 10) break;
-  }
-
-  return { colorsForLog };
-};
-
 const getVibrantColor = async (imageUrl, fallback = '#121212') => {
   try {
     const response = await axios.get(imageUrl, {
@@ -146,11 +107,11 @@ const getVibrantColor = async (imageUrl, fallback = '#121212') => {
     const buffer = Buffer.from(response.data);
     let colorThiefProcessed = null;
 
+    // 1. PROCESSAMENTO DO COLOR THIEF
     try {
       const palette = await ColorThief.getPalette(buffer, 1000);
       const colorsForLog = [];                
       for (const rgb of palette) {            
-        const [r, g, b] = rgb;
         const [h, s, l] = rgbToHsl(...rgb);
         if (!colorsForLog.some(c => Math.abs(rgbToHsl(...c)[0] - h) < 10) && s >= 0.4) { 
           colorsForLog.push(rgb);
@@ -168,7 +129,16 @@ const getVibrantColor = async (imageUrl, fallback = '#121212') => {
 
     console.log('\nExtracting extra palette options using node-vibrant:');
     
-    const vibrantPalette = await Vibrant.from(buffer).getPalette();
+    // ==========================================================================
+    // 2. CONVERSÃO MATADORA PARA O NODE-VIBRANT ACEITAR WEBP
+    // Convertemos o buffer original (mesmo se for WebP) em um stream PNG puro.
+    // O node-vibrant processa a paleta REAL da imagem sem dar erro de MIME.
+    // ==========================================================================
+    const compatibleBuffer = await sharp(buffer)
+      .toFormat('png')
+      .toBuffer();
+
+    const vibrantPalette = await Vibrant.from(compatibleBuffer).getPalette();
 
     return {
       customThief: colorThiefProcessed || enhanceColorForUI(vibrantPalette.Vibrant?.hex, 'Fallback Thief') || fallback,

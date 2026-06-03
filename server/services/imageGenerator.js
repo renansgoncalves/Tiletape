@@ -1,9 +1,7 @@
 const fs = require('fs/promises');
 const puppeteer = require('puppeteer');
 const { getVibrantColor } = require('./colorExtractor');
-const { darkenHexColor } = require('../utils/color');
 
-// Singleton para a instância do navegador
 let browserInstance = null;
 
 async function getBrowserInstance() {
@@ -26,25 +24,14 @@ async function getBrowserInstance() {
 }
 
 const generateImage = async (playlistData) => {
-  // Pega a instância reaproveitável
   const browser = await getBrowserInstance();
-  
-  // Abre APENAS uma nova página (aba) e não o Chromium inteiro
   const page = await browser.newPage();
   
-  // O bloco try...finally garante que a página será fechada mesmo se a extração de dados falhar
   try {
     let templateHtml = await fs.readFile('./templates/playlist.html', 'utf8');
-
     const playlistCoverUrl = playlistData.images[0]?.url || '';
-    
-    // Agora recebemos o objeto completo de cores (A Paleta Inteira)
     const colorPalette = await getVibrantColor(playlistCoverUrl);
-    
-    // Define a cor principal utilizando a lógica matemática que afinamos (customThief)
     const vibrantColor = colorPalette.customThief;
-    
-    // Prepara as faixas
     const tracks = playlistData.tracks.items
       .slice(0, 32)
       .map(item => {
@@ -96,7 +83,7 @@ const generateImage = async (playlistData) => {
       );
 
     // Ajusta a página e injeta o conteúdo
-    await page.setViewport({ width: 2160, height: 4680, deviceScaleFactor: 1 });
+    await page.setViewport({ width: 1080, height: 2340, deviceScaleFactor: 1 });
     await page.setContent(templateHtml, { waitUntil: 'load', timeout: 90000 });
 
     const cardElement = await page.$('#card-container');
@@ -108,13 +95,13 @@ const generateImage = async (playlistData) => {
       cardBuffer, 
       pageBuffer, 
       cardBox,
-      vibrantColor, // Mantém a cor principal para não quebrar rotas antigas
-      colorPalette, // Exporta o cardápio inteiro de cores para o Frontend!
+      vibrantColor,
+      colorPalette,
       playlistName: playlistData.name 
     };
 
   } finally {
-    // Garante que APENAS a aba (page) será fechada, mantendo o navegador aberto
+    // Garante que apenas a aba será fechada, mantendo o navegador aberto
     await page.close();
   }
 };
